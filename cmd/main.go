@@ -23,8 +23,8 @@ func main() {
 		},
 		Before: infra.Init,
 		Commands: []*cli.Command{
-			command.NewAddCommand(),
-			command.NewRemoveCommand(),
+			command.NewUserCommand(),
+			command.NewProcessCommand(),
 		},
 		Action: func(c *cli.Context) error {
 			cli.ShowAppHelpAndExit(c, 0)

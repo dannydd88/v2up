@@ -1,0 +1,10 @@
+api:
+  host: "127.0.0.1"
+  port: 10240
+
+user:
+  default:
+    tag: "main"
+    level: 1
+    alterId: 100
+  storage: "user.json"

@@ -6,13 +6,25 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type V2rayConfig struct {
+type Api struct {
 	Host string `yaml:"host"`
 	Port int    `yaml:"port"`
 }
 
+type User struct {
+	Default UserDefault `yaml:"default"`
+	Storage string      `yaml:"storage"`
+}
+
+type UserDefault struct {
+	Tag     string `yaml:"tag"`
+	Level   int    `yaml:"level"`
+	AlterId int    `yaml:"alterId"`
+}
+
 type Config struct {
-	V2ray V2rayConfig `yaml:"v2ray"`
+	Api  Api  `yaml:"api"`
+	User User `yaml:"user"`
 }
 
 func load(filepath *string) (*Config, error) {
