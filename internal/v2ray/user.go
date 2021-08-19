@@ -73,6 +73,17 @@ func (u *User) Add(c *cli.Context) error {
 	}
 	infra.GetLogger().Log("[USER]", "user data add user success")
 
+	// ). notify
+	if c.Bool(internal.FLAG_USER_NOTIFY) {
+		tpl := infra.GetConfig().User.NotifyTemplate
+		msg := fmt.Sprintf(tpl, id, email)
+		infra.GetLogger().Log("[USER]", "email user ->", msg)
+		err = infra.GetMailer().SendMail(email, "v2ray vmess info", msg)
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 

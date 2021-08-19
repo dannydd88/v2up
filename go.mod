@@ -9,5 +9,7 @@ require (
 	github.com/urfave/cli/v2 v2.3.0
 	github.com/v2fly/v2ray-core/v4 v4.41.1
 	google.golang.org/grpc v1.40.0
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+	gopkg.in/mail.v2 v2.3.1
 	gopkg.in/yaml.v2 v2.4.0
 )

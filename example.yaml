@@ -8,3 +8,13 @@ user:
     level: 1
     alterId: 100
   storage: "user.json"
+  notifyTemplate: |-
+    xxx
+    xxx
+    xxx
+
+smtp:
+  address: "smtp.xxx.com"
+  port: 465
+  username: "xxx@xxx.com"
+  password: "xxx"

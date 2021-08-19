@@ -11,6 +11,7 @@ import (
 type V2upContext struct {
 	Logging base.Logger
 	Config  Config
+	Mailer  *Mailer
 }
 
 var globalContext V2upContext
@@ -23,6 +24,7 @@ func Init(c *cli.Context) error {
 	globalContext.Logging = base.NewDefaultLogger()
 
 	// ). init config
+	var config *Config
 	{
 		// ). Get current dir
 		dir, err := os.Getwd()
@@ -35,12 +37,22 @@ func Init(c *cli.Context) error {
 		if !filepath.IsAbs(configPath) {
 			configPath = filepath.Join(dir, configPath)
 		}
-		config, err := load(base.String(configPath))
+		config, err = load(base.String(configPath))
 		if err != nil {
 			return err
 		}
 
 		globalContext.Config = *config
+	}
+
+	// ). init mailer
+	{
+		globalContext.Mailer = &Mailer{
+			smtpAdress:   config.Smtp.Address,
+			smtpPort:     config.Smtp.Port,
+			smtpUsername: config.Smtp.Username,
+			smtpPassword: config.Smtp.Password,
+		}
 	}
 
 	return nil
@@ -52,4 +64,8 @@ func GetLogger() base.Logger {
 
 func GetConfig() *Config {
 	return &globalContext.Config
+}
+
+func GetMailer() *Mailer {
+	return globalContext.Mailer
 }

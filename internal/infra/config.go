@@ -12,8 +12,9 @@ type Api struct {
 }
 
 type User struct {
-	Default UserDefault `yaml:"default"`
-	Storage string      `yaml:"storage"`
+	Default        UserDefault `yaml:"default"`
+	Storage        string      `yaml:"storage"`
+	NotifyTemplate string      `yaml:"notifyTemplate"`
 }
 
 type UserDefault struct {
@@ -22,9 +23,17 @@ type UserDefault struct {
 	AlterId int    `yaml:"alterId"`
 }
 
+type Smtp struct {
+	Address  string `yaml:"address"`
+	Port     int    `yaml:"port"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+}
+
 type Config struct {
 	Api  Api  `yaml:"api"`
 	User User `yaml:"user"`
+	Smtp Smtp `yaml:"smtp"`
 }
 
 func load(filepath *string) (*Config, error) {
