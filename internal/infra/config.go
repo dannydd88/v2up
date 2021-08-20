@@ -12,15 +12,21 @@ type Api struct {
 }
 
 type User struct {
-	Default        UserDefault `yaml:"default"`
-	Storage        string      `yaml:"storage"`
-	NotifyTemplate string      `yaml:"notifyTemplate"`
+	Default UserDefault `yaml:"default"`
+	Storage string      `yaml:"storage"`
+	Notify  UserNotify  `yaml:"notify"`
 }
 
 type UserDefault struct {
 	Tag     string `yaml:"tag"`
 	Level   int    `yaml:"level"`
 	AlterId int    `yaml:"alterId"`
+}
+
+type UserNotify struct {
+	Type     string `yaml:"type"`
+	Title    string `yaml:"title"`
+	Template string `yaml:"template"`
 }
 
 type Smtp struct {

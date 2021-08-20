@@ -10,7 +10,10 @@ const (
 
 	FLAG_USER_EMAIL  = "email"
 	FLAG_USER_UUID   = "uuid"
-	FLAG_USER_NOTIFY = "notify"
+	FLAG_USER_SILENT = "silent"
+
+	USER_NOTIFY_TYPE_NONE = "none"
+	USER_NOTIFY_TYPE_SMTP = "smtp"
 
 	// command proc
 	COMMAND_PROCESS = "proc"

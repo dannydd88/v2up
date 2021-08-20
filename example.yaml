@@ -8,10 +8,13 @@ user:
     level: 1
     alterId: 100
   storage: "user.json"
-  notifyTemplate: |-
-    xxx
-    xxx
-    xxx
+  notify:
+    type: "smtp" # none / smtp
+    title: "xxx"
+    template: |-
+      xxx
+      xxx
+      xxx
 
 smtp:
   address: "smtp.xxx.com"

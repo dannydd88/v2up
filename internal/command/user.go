@@ -26,8 +26,8 @@ func NewUserCommand() *cli.Command {
 						Usage: "User uuid",
 					},
 					&cli.BoolFlag{
-						Name:  internal.FLAG_USER_NOTIFY,
-						Usage: "If notify user via email when add user success",
+						Name:  internal.FLAG_USER_SILENT,
+						Usage: "Do not notify user via email when add user success",
 						Value: false,
 					},
 				},
