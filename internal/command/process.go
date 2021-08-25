@@ -2,6 +2,7 @@ package command
 
 import (
 	"io/ioutil"
+	"time"
 
 	"github.com/codeskyblue/go-sh"
 	"github.com/dannydd88/v2up/internal"
@@ -28,7 +29,8 @@ func NewProcessCommand() *cli.Command {
 					if err != nil {
 						return err
 					}
-					infra.GetLogger().Log("[PROC]", "start v2ray success")
+					infra.GetLogger().Log("[PROC]", "start v2ray success, wait for 10s for process ready")
+					<-time.After(10 * time.Second)
 					err = v2ray.UserHandler().Restore(c)
 					if err != nil {
 						return err
