@@ -1,8 +1,9 @@
 package command
 
 import (
-	"github.com/dannydd88/v2up/internal"
-	"github.com/dannydd88/v2up/internal/v2ray"
+	"v2up/internal"
+	"v2up/internal/v2ray"
+
 	"github.com/urfave/cli/v2"
 )
 

@@ -4,10 +4,11 @@ import (
 	"io/ioutil"
 	"time"
 
+	"v2up/internal"
+	"v2up/internal/infra"
+	"v2up/internal/v2ray"
+
 	"github.com/codeskyblue/go-sh"
-	"github.com/dannydd88/v2up/internal"
-	"github.com/dannydd88/v2up/internal/infra"
-	"github.com/dannydd88/v2up/internal/v2ray"
 	"github.com/urfave/cli/v2"
 )
 

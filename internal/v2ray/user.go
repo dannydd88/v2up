@@ -4,9 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/dannydd88/v2up/internal"
-	"github.com/dannydd88/v2up/internal/infra"
-	"github.com/dannydd88/v2up/internal/storage"
+	"v2up/internal"
+	"v2up/internal/infra"
+	"v2up/internal/storage"
+
 	"github.com/google/uuid"
 	"github.com/urfave/cli/v2"
 	handler "github.com/v2fly/v2ray-core/v4/app/proxyman/command"

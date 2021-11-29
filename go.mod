@@ -1,4 +1,4 @@
-module github.com/dannydd88/v2up
+module v2up
 
 go 1.16
 
