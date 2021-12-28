@@ -7,6 +7,7 @@ const (
 	USER_COMMAND_ADD     = "add"
 	USER_COMMAND_REMOVE  = "remove"
 	USER_COMMAND_RESTORE = "restore"
+	USER_COMMAND_BACKUP  = "backup"
 
 	FLAG_USER_EMAIL  = "email"
 	FLAG_USER_UUID   = "uuid"

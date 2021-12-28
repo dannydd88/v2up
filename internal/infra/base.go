@@ -1,9 +1,6 @@
 package infra
 
 import (
-	"os"
-	"path/filepath"
-
 	"github.com/dannydd88/gobase/pkg/base"
 	"github.com/urfave/cli/v2"
 )
@@ -24,20 +21,9 @@ func Init(c *cli.Context) error {
 	globalContext.Logging = base.NewDefaultLogger()
 
 	// ). init config
-	var config *Config
 	{
-		// ). Get current dir
-		dir, err := os.Getwd()
-		if err != nil {
-			return err
-		}
-
 		// ). Load config
-		configPath := c.String("config")
-		if !filepath.IsAbs(configPath) {
-			configPath = filepath.Join(dir, configPath)
-		}
-		config, err = load(base.String(configPath))
+		config, err := load(base.String(c.String("config")))
 		if err != nil {
 			return err
 		}
@@ -48,10 +34,10 @@ func Init(c *cli.Context) error {
 	// ). init mailer
 	{
 		globalContext.Mailer = &Mailer{
-			smtpAdress:   config.Smtp.Address,
-			smtpPort:     config.Smtp.Port,
-			smtpUsername: config.Smtp.Username,
-			smtpPassword: config.Smtp.Password,
+			smtpAdress:   globalContext.Config.Smtp.Address,
+			smtpPort:     globalContext.Config.Smtp.Port,
+			smtpUsername: globalContext.Config.Smtp.Username,
+			smtpPassword: globalContext.Config.Smtp.Password,
 		}
 	}
 

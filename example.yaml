@@ -15,6 +15,8 @@ user:
       xxx
       xxx
       xxx
+  backup:
+    bucket: "xxx"
 
 smtp:
   address: "smtp.xxx.com"

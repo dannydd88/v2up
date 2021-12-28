@@ -1,8 +1,12 @@
 package infra
 
 import (
+	"fmt"
 	"io/ioutil"
+	"os"
+	"path/filepath"
 
+	"github.com/dannydd88/gobase/pkg/base"
 	"gopkg.in/yaml.v2"
 )
 
@@ -15,6 +19,7 @@ type User struct {
 	Default UserDefault `yaml:"default"`
 	Storage string      `yaml:"storage"`
 	Notify  UserNotify  `yaml:"notify"`
+	Backup  UserBackup  `yaml:"backup"`
 }
 
 type UserDefault struct {
@@ -27,6 +32,10 @@ type UserNotify struct {
 	Type     string `yaml:"type"`
 	Title    string `yaml:"title"`
 	Template string `yaml:"template"`
+}
+
+type UserBackup struct {
+	Bucket string `yaml:"bucket"`
 }
 
 type Smtp struct {
@@ -42,15 +51,55 @@ type Config struct {
 	Smtp Smtp `yaml:"smtp"`
 }
 
-func load(filepath *string) (*Config, error) {
+func load(path *string) (*Config, error) {
+	if len(base.StringValue(path)) == 0 {
+		return nil, fmt.Errorf("empty config path")
+	}
+
+	// ). find out final full config filepath
+	var p string
+	if filepath.IsAbs(*path) {
+		p = *path
+	} else {
+		paths := searchPaths(path)
+		for _, sp := range paths {
+			if base.FileExists(sp) {
+				p = *sp
+				break
+			}
+		}
+	}
+
+	// ). do load config
 	c := Config{}
-	data, err := ioutil.ReadFile(*filepath)
+	data, err := ioutil.ReadFile(p)
 	if err != nil {
 		return nil, err
 	}
-	err = yaml.Unmarshal(data, &c)
+	err = yaml.UnmarshalStrict(data, &c)
 	if err != nil {
 		return nil, err
 	}
 	return &c, nil
+}
+
+func searchPaths(path *string) []*string {
+	paths := []*string{}
+
+	// 1). current working dir
+	dir, err := os.Getwd()
+	if err == nil {
+		paths = append(
+			paths,
+			base.String(filepath.Join(dir, *path)),
+		)
+	}
+
+	// 2). /etc/v2up
+	paths = append(
+		paths,
+		base.String(filepath.Join("/etc/v2up", *path)),
+	)
+
+	return paths
 }

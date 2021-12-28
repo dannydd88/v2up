@@ -1,9 +1,14 @@
 package command
 
 import (
+	"fmt"
+	"io/ioutil"
+	"time"
 	"v2up/internal"
+	"v2up/internal/infra"
 	"v2up/internal/v2ray"
 
+	"github.com/codeskyblue/go-sh"
 	"github.com/urfave/cli/v2"
 )
 
@@ -49,6 +54,36 @@ func NewUserCommand() *cli.Command {
 				Name:   internal.USER_COMMAND_RESTORE,
 				Usage:  "Restore all vmess users to v2ray process",
 				Action: v2ray.UserHandler().Restore,
+			},
+			{
+				Name:  internal.USER_COMMAND_BACKUP,
+				Usage: "Backup all vmess users config to s3",
+				Action: func(c *cli.Context) error {
+					src := infra.GetConfig().User.Storage
+					dest := fmt.Sprintf(
+						"s3://%s/vpn/user-%s.json",
+						infra.GetConfig().User.Backup.Bucket,
+						time.Now().Format("2006_01_02_15"),
+					)
+					infra.GetLogger().Log("[USER-BACKUP]", "do backup:", src, "to:", dest)
+
+					sess := sh.NewSession()
+					sess.Stdout = ioutil.Discard
+					sess.Stderr = ioutil.Discard
+					err := sess.Command(
+						"aws",
+						"s3",
+						"cp",
+						src,
+						dest,
+					).Run()
+					if err != nil {
+						return err
+					}
+
+					infra.GetLogger().Log("[USER-BACKUP]", "backup success")
+					return nil
+				},
 			},
 		},
 		Action: func(c *cli.Context) error {
