@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/dannydd88/gobase/pkg/base"
+	"github.com/dannydd88/dd-go"
 	"gopkg.in/yaml.v2"
 )
 
@@ -52,7 +52,7 @@ type Config struct {
 }
 
 func load(path *string) (*Config, error) {
-	if len(base.StringValue(path)) == 0 {
+	if len(dd.StringValue(path)) == 0 {
 		return nil, fmt.Errorf("empty config path")
 	}
 
@@ -63,7 +63,7 @@ func load(path *string) (*Config, error) {
 	} else {
 		paths := searchPaths(path)
 		for _, sp := range paths {
-			if base.FileExists(sp) {
+			if dd.FileExists(sp) {
 				p = *sp
 				break
 			}
@@ -91,14 +91,14 @@ func searchPaths(path *string) []*string {
 	if err == nil {
 		paths = append(
 			paths,
-			base.String(filepath.Join(dir, *path)),
+			dd.String(filepath.Join(dir, *path)),
 		)
 	}
 
 	// 2). /etc/v2up
 	paths = append(
 		paths,
-		base.String(filepath.Join("/etc/v2up", *path)),
+		dd.String(filepath.Join("/etc/v2up", *path)),
 	)
 
 	return paths

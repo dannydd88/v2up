@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/dannydd88/gobase/pkg/base"
+	"github.com/dannydd88/dd-go"
 )
 
 type UserEntry struct {
@@ -41,7 +41,7 @@ func (u *UserData) Load(filename string) error {
 	if err != nil {
 		return err
 	}
-	if base.FileExists(base.String(filename)) {
+	if dd.FileExists(dd.String(filename)) {
 		raw, err := ioutil.ReadFile(filename)
 		if err != nil {
 			return err

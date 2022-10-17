@@ -1,12 +1,12 @@
 package infra
 
 import (
-	"github.com/dannydd88/gobase/pkg/base"
+	"github.com/dannydd88/dd-go"
 	"github.com/urfave/cli/v2"
 )
 
 type V2upContext struct {
-	Logging base.Logger
+	Logging dd.Logger
 	Config  Config
 	Mailer  *Mailer
 }
@@ -18,12 +18,12 @@ func Init(c *cli.Context) error {
 	globalContext = V2upContext{}
 
 	// ). init logging
-	globalContext.Logging = base.NewDefaultLogger()
+	globalContext.Logging = dd.NewDefaultLogger()
 
 	// ). init config
 	{
 		// ). Load config
-		config, err := load(base.String(c.String("config")))
+		config, err := load(dd.String(c.String("config")))
 		if err != nil {
 			return err
 		}
@@ -44,7 +44,7 @@ func Init(c *cli.Context) error {
 	return nil
 }
 
-func GetLogger() base.Logger {
+func GetLogger() dd.Logger {
 	return globalContext.Logging
 }
 
