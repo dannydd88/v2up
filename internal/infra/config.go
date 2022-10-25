@@ -2,12 +2,10 @@ package infra
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
 	"github.com/dannydd88/dd-go"
-	"gopkg.in/yaml.v2"
 )
 
 type Api struct {
@@ -51,55 +49,42 @@ type Config struct {
 	Smtp Smtp `yaml:"smtp"`
 }
 
-func load(path *string) (*Config, error) {
-	if len(dd.StringValue(path)) == 0 {
+func ensurePath(path *string) (*string, error) {
+	if len(dd.Val(path)) == 0 {
 		return nil, fmt.Errorf("empty config path")
 	}
 
-	// ). find out final full config filepath
-	var p string
+	// ). check if it is an absolute path
 	if filepath.IsAbs(*path) {
-		p = *path
-	} else {
-		paths := searchPaths(path)
-		for _, sp := range paths {
-			if dd.FileExists(sp) {
-				p = *sp
-				break
-			}
-		}
+		return path, nil
 	}
 
-	// ). do load config
-	c := Config{}
-	data, err := ioutil.ReadFile(p)
-	if err != nil {
-		return nil, err
-	}
-	err = yaml.UnmarshalStrict(data, &c)
-	if err != nil {
-		return nil, err
-	}
-	return &c, nil
-}
-
-func searchPaths(path *string) []*string {
+	// ). build searching path
 	paths := []*string{}
+	{
+		// 1). current working dir
+		dir, err := os.Getwd()
+		if err == nil {
+			paths = append(
+				paths,
+				dd.Ptr(filepath.Join(dir, dd.Val(path))),
+			)
+		}
 
-	// 1). current working dir
-	dir, err := os.Getwd()
-	if err == nil {
+		// 2). /etc/v2up
 		paths = append(
 			paths,
-			dd.String(filepath.Join(dir, *path)),
+			dd.Ptr(filepath.Join("/etc/v2up", dd.Val(path))),
 		)
 	}
 
-	// 2). /etc/v2up
-	paths = append(
-		paths,
-		dd.String(filepath.Join("/etc/v2up", *path)),
-	)
+	// ). foreach paths, return path if it is existed
+	for _, sp := range paths {
+		if dd.FileExists(sp) {
+			return sp, nil
+		}
+	}
 
-	return paths
+	// ). return error, because cannot find path
+	return nil, fmt.Errorf("cannot find file -> %s", dd.Val(path))
 }

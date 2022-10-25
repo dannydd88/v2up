@@ -6,29 +6,36 @@ import (
 )
 
 type V2upContext struct {
-	Logging dd.Logger
-	Config  Config
+	Logging dd.LevelLogger
+	Config  *Config
 	Mailer  *Mailer
 }
 
 var globalContext V2upContext
 
-func Init(c *cli.Context) error {
+func AppInit(c *cli.Context) error {
 	// ). init context
 	globalContext = V2upContext{}
 
 	// ). init logging
-	globalContext.Logging = dd.NewDefaultLogger()
+	globalContext.Logging = dd.NewLevelLogger(dd.INFO)
 
+	return nil
+}
+
+func CommandInit(c *cli.Context) error {
 	// ). init config
 	{
+		globalContext.Config = &Config{}
 		// ). Load config
-		config, err := load(dd.String(c.String("config")))
+		path, err := ensurePath(dd.Ptr(c.String("config")))
 		if err != nil {
 			return err
 		}
-
-		globalContext.Config = *config
+		err = dd.NewYAMLLoader[Config](path).Load(globalContext.Config)
+		if err != nil {
+			return err
+		}
 	}
 
 	// ). init mailer
@@ -44,12 +51,12 @@ func Init(c *cli.Context) error {
 	return nil
 }
 
-func GetLogger() dd.Logger {
+func GetLogger() dd.LevelLogger {
 	return globalContext.Logging
 }
 
 func GetConfig() *Config {
-	return &globalContext.Config
+	return globalContext.Config
 }
 
 func GetMailer() *Mailer {

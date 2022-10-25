@@ -1,7 +1,7 @@
 package command
 
 import (
-	"io/ioutil"
+	"io"
 	"time"
 
 	"v2up/internal"
@@ -14,8 +14,9 @@ import (
 
 func NewProcessCommand() *cli.Command {
 	return &cli.Command{
-		Name:  internal.COMMAND_PROCESS,
-		Usage: "Process actions to v2ray process",
+		Name:   internal.COMMAND_PROCESS,
+		Usage:  "Process actions to v2ray process",
+		Before: infra.CommandInit,
 		Subcommands: []*cli.Command{
 			{
 				Name:    internal.PROCESS_COMMAND_START,
@@ -24,8 +25,8 @@ func NewProcessCommand() *cli.Command {
 				Action: func(c *cli.Context) error {
 					infra.GetLogger().Log("[PROC]", "do start v2ray...")
 					sess := sh.NewSession()
-					sess.Stdout = ioutil.Discard
-					sess.Stderr = ioutil.Discard
+					sess.Stdout = io.Discard
+					sess.Stderr = io.Discard
 					err := sess.Command("systemctl", "restart", "v2ray").Run()
 					if err != nil {
 						return err
@@ -46,8 +47,8 @@ func NewProcessCommand() *cli.Command {
 				Action: func(c *cli.Context) error {
 					infra.GetLogger().Log("[PROC]", "do stop v2ray...")
 					sess := sh.NewSession()
-					sess.Stdout = ioutil.Discard
-					sess.Stderr = ioutil.Discard
+					sess.Stdout = io.Discard
+					sess.Stderr = io.Discard
 					err := sess.Command("systemctl", "stop", "v2ray").Run()
 					if err != nil {
 						return err
@@ -56,6 +57,10 @@ func NewProcessCommand() *cli.Command {
 					return nil
 				},
 			},
+		},
+		Action: func(ctx *cli.Context) error {
+			cli.ShowSubcommandHelpAndExit(ctx, 0)
+			return nil
 		},
 	}
 }

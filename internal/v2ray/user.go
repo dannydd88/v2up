@@ -42,7 +42,7 @@ func (u *User) Add(c *cli.Context) error {
 	// ). setup
 	err := u.setup()
 	if err != nil {
-		infra.GetLogger().Log("[USER]", "setup error ->", err)
+		infra.GetLogger().Error("[USER]", "setup error ->", err)
 		return err
 	}
 	defer u.tearDown()
@@ -103,7 +103,7 @@ func (u *User) Remove(c *cli.Context) error {
 	// ). setup
 	err := u.setup()
 	if err != nil {
-		infra.GetLogger().Log("[USER]", "setup error ->", err)
+		infra.GetLogger().Error("[USER]", "setup error ->", err)
 		return err
 	}
 	defer u.tearDown()
@@ -136,7 +136,7 @@ func (u *User) Restore(c *cli.Context) error {
 	// ). setup
 	err := u.setup()
 	if err != nil {
-		infra.GetLogger().Log("[USER]", "setup error ->", err)
+		infra.GetLogger().Error("[USER]", "setup error ->", err)
 		return err
 	}
 	defer u.tearDown()

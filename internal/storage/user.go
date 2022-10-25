@@ -3,7 +3,6 @@ package storage
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -41,8 +40,8 @@ func (u *UserData) Load(filename string) error {
 	if err != nil {
 		return err
 	}
-	if dd.FileExists(dd.String(filename)) {
-		raw, err := ioutil.ReadFile(filename)
+	if dd.FileExists(dd.Ptr(filename)) {
+		raw, err := os.ReadFile(filename)
 		if err != nil {
 			return err
 		}
@@ -65,7 +64,7 @@ func (u *UserData) Save(filename string) error {
 	if err != nil {
 		return err
 	}
-	err = ioutil.WriteFile(filename, data, 0644)
+	err = os.WriteFile(filename, data, 0644)
 	if err != nil {
 		return err
 	}

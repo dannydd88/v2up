@@ -2,8 +2,9 @@ package command
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"time"
+
 	"v2up/internal"
 	"v2up/internal/infra"
 	"v2up/internal/v2ray"
@@ -14,8 +15,9 @@ import (
 
 func NewUserCommand() *cli.Command {
 	return &cli.Command{
-		Name:  internal.COMMAND_USER,
-		Usage: "User actions to v2ray vmess account",
+		Name:   internal.COMMAND_USER,
+		Usage:  "User actions to v2ray vmess account",
+		Before: infra.CommandInit,
 		Subcommands: []*cli.Command{
 			{
 				Name:   internal.USER_COMMAND_ADD,
@@ -68,8 +70,8 @@ func NewUserCommand() *cli.Command {
 					infra.GetLogger().Log("[USER-BACKUP]", "do backup:", src, "to:", dest)
 
 					sess := sh.NewSession()
-					sess.Stdout = ioutil.Discard
-					sess.Stderr = ioutil.Discard
+					sess.Stdout = io.Discard
+					sess.Stderr = io.Discard
 					err := sess.Command(
 						"aws",
 						"s3",
@@ -86,8 +88,8 @@ func NewUserCommand() *cli.Command {
 				},
 			},
 		},
-		Action: func(c *cli.Context) error {
-			cli.ShowCommandHelpAndExit(c, "", 0)
+		Action: func(ctx *cli.Context) error {
+			cli.ShowSubcommandHelpAndExit(ctx, 0)
 			return nil
 		},
 	}
