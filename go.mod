@@ -6,7 +6,7 @@ require (
 	github.com/codeskyblue/go-sh v0.0.0-20200712050446-30169cf553fe
 	github.com/dannydd88/dd-go v0.2.4
 	github.com/google/uuid v1.3.0
-	github.com/urfave/cli/v2 v2.20.3
+	github.com/urfave/cli/v2 v2.23.5
 	github.com/v2fly/v2ray-core/v4 v4.44.0
 	google.golang.org/grpc v1.41.0
 	gopkg.in/mail.v2 v2.3.1
